@@ -1,5 +1,7 @@
+import { environment } from 'src/environments/environment';
+
 export const ServiceUrl = {
-  api_url: 'https://apitest.ecuworldwide.com',
+  api_url: environment.apiurl,
 };
 
 export enum API {

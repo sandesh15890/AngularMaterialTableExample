@@ -23,7 +23,7 @@
   <label class="col-sm-1">From :</label>
   <mat-form-field class="col-sm-3">
     <mat-label>From Location</mat-label>
-    <input
+    <input required
       type="text"
       placeholder="Please enter first 2 letter of location"
       aria-label="Number"
@@ -40,9 +40,9 @@
   <label class="col-sm-1">To :</label>
   <mat-form-field class="col-sm-3">
     <mat-label>To Location</mat-label>
-    <input
+    <input required
       type="text"
-      placeholder="Pick one"
+      placeholder="Please enter first 2 letter of location"
       aria-label="Number"
       matInput
       [formControl]="toLocation"
@@ -104,7 +104,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="voyageNumber">
-        <th class="w-8" mat-header-cell *matHeaderCellDef>Voyage No.</th>
+        <th class="w-8" mat-header-cell *matHeaderCellDef mat-sort-header="voyageNumber">Voyage No.</th>
         <td mat-cell *matCellDef="let row">
           <span>{{ row.voyageNumber }}</span>
         </td>
@@ -123,7 +123,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="cutOff">
-        <th class="w-8" mat-header-cell *matHeaderCellDef>Cut Off</th>
+        <th class="w-8" mat-header-cell *matHeaderCellDef mat-sort-header="cutOff">Cut Off</th>
         <td mat-cell *matCellDef="let row">
           <span>{{ row.cutOff | daysFromNow }}</span>
         </td>
@@ -135,7 +135,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="etd">
-        <th class="w-8" mat-header-cell *matHeaderCellDef>ETD</th>
+        <th class="w-8" mat-header-cell *matHeaderCellDef mat-sort-header="etd">ETD</th>
         <td mat-cell *matCellDef="let row">
           <span>{{ row.etd | daysFromNow }}</span>
         </td>
@@ -186,7 +186,7 @@
     </table>
   </div>
   <mat-paginator
-    *ngIf="scheduleData.data.length > 0"
+    [hidden]="scheduleData.data.length == 0"
     [length]="scheduleData.data.length"
     [pageSize]="5"
     [pageSizeOptions]="[5, 10, 20]"

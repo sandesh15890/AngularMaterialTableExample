@@ -5,8 +5,6 @@ import { Location, ScheduleModel } from '../sailingschedule.model';
 import { SailingscheduleService } from '../sailingschedule.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { catchError, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sailingscheduleview',
@@ -45,6 +43,7 @@ export class Sailingscheduleview implements OnInit {
   ngOnInit(): void {
     this.fromLocation.valueChanges
       .subscribe((res) => {
+        this.from = res;
         if (res.length > 1) {
           this.fromOptions = [];
           this._sailingscheduleService.getLocations(res).subscribe((res) => {
@@ -53,6 +52,7 @@ export class Sailingscheduleview implements OnInit {
         }
       });
     this.toLocation.valueChanges.subscribe((res) => {
+       this.to = res;
       if (res.length > 1) {
             this.toOptions = [];
            this._sailingscheduleService.getLocations(res).subscribe((res) => {
@@ -60,11 +60,7 @@ export class Sailingscheduleview implements OnInit {
             });
         }
     });
-    this.getSchedules('be', 'sgsin');
-  }
-
-  selected($event : any) {
-    console.log($event); 
+    //this.getSchedules('', '');
   }
 
   ngAfterViewInit() {
@@ -86,6 +82,10 @@ export class Sailingscheduleview implements OnInit {
   }
 
   getSchedules(from: string, to: string) {
+    if ((from == undefined || from == '') || (to ==undefined || to == '')) {
+      alert('From and to locations are mandatory');
+      return;
+    }
     this.isLoadingResults = true;
     var scheduleSubscription = this._sailingscheduleService.getSchailingSchedules(
       from,
@@ -94,21 +94,12 @@ export class Sailingscheduleview implements OnInit {
     scheduleSubscription.subscribe((res) => {
       this.isLoadingResults = false;
       this.scheduleData.data = res as ScheduleModel[];
-      console.log(this.scheduleData.data.length);
     }),
       (err) => {
         this.isLoadingResults = false;
-        console.log('error occured while fetching details', err);
         this.scheduleData.data = [];
       };
   }
-
-  // private _filter(value: string): Location[] {
-  //   const filterValue = value.toLowerCase();
-  //   return this.locationData.filter(
-  //     (option) => option.name.toLowerCase().indexOf(filterValue) === 0
-  //   );
-  // }
 
   sortData(sort: Sort) {
     const data = this.scheduleData.data.slice();
@@ -121,6 +112,12 @@ export class Sailingscheduleview implements OnInit {
       switch (sort.active) {
         case 'id':
           return this.compare(a.id, b.id, isAsc);
+        case 'voyageNumber':
+          return this.compare(a.voyageNumber, b.voyageNumber, isAsc);
+        case 'cutOff':
+          return this.compare(a.cutOff, b.cutOff, isAsc);
+         case 'etd':
+          return this.compare(a.etd, b.etd, isAsc);
         default:
           return 0;
       }

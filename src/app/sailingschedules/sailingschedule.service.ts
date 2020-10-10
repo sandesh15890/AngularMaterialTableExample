@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ServiceUrl, API, Methods } from '../apiUrlsetting.model';
-import { ScheduleModel, Place, Location } from './sailingschedule.model';
+import { Location } from './sailingschedule.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class SailingscheduleService {
         return res;
       }),
       catchError((err) => {
-        console.log(err);
+        //console.log(err);
         return of([]);
       })
     );
